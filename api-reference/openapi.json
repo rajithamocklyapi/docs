@@ -1,25 +1,16 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Mock API API",
+    "title": "MocklyAPI",
     "description": "API documentation",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "https://big-tallie-ripro-a9162a89.koyeb.app"
+      "url": "https://api.mocklyapi.com"
     }
   ],
   "paths": {
-    "/api/user/me": {
-      "get": {
-        "responses": {
-          "200": {
-            "description": "Default Response"
-          }
-        }
-      }
-    },
     "/mock/{mockApiId}": {
       "get": {
         "parameters": [
@@ -27,6 +18,7 @@
             "name": "auth_token",
             "in": "query",
             "required": false,
+            "description": "Authentication token is required for private endpoints",
             "schema": {
               "type": "string"
             }
@@ -35,15 +27,96 @@
             "name": "mockApiId",
             "in": "path",
             "required": true,
+            "description": "Mock api unique id",
             "schema": {
               "type": "string",
               "format": "uuid"
+            }
+          },
+          {
+            "name": "api-key",
+            "in": "header",
+            "description": "Authentication token is required for private endpoints",
+            "required": false,
+            "schema": {
+              "type": "string"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Default Response"
+            "description": "Success Response",
+            "content": {
+              "application/json": {
+          "schema": {
+            "type": "array"
+          }
+              }
+            }
+          },
+          "401": {
+            "description": "Auth token not found or Invalid auth token",
+            "content": {
+              "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "string",
+                "example": "Auth token not found or Invalid auth token"
+                  }
+                }
+              }
+              }
+            }
+          },
+          "405": {
+            "description": "Invalid Method",
+            "content": {
+              "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "string",
+                "example": "Invalid Method"
+                  }
+                }
+              }
+              }
+            }
+          },
+          "404": {
+            "description": "Mock api not found",
+            "content": {
+              "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "string",
+                "example": "Mock api not found"
+                  }
+                }
+              }
+              }
+            }
+          },
+          "400": {
+            "description": "Monthly quota exceeded",
+            "content": {
+              "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "string",
+                "example": "Monthly quota exceeded"
+                  }
+                }
+              }
+              }
+            }
           }
         }
       }

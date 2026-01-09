@@ -1,11 +1,11 @@
 ---
 title: "Quickstart"
-description: "Start building your very first mock api"
+description: "Begin building your first mock API with ease"
 ---
 
-## Get started
+## Getting Started
 
-Upon your first login to MocklyAPI, you'll be onboarded with a new organization and project automatically created.
+When you log in to MocklyAPI for the first time, an organization and project will be automatically created for you. 
 To create additional organizations, use the organization switcher and select the option to create a new one.
 
 <Frame>
@@ -16,67 +16,60 @@ To create additional organizations, use the organization switcher and select the
   <img src="/images/create-organization-modal.png" alt="Screenshot of organization switcher." style={{ margin:'10px', borderRadius: '0.5rem' }} />
 </Frame>
 
-<Callout icon="dollar-sign" color="#407C8F" iconType="regular">You will be billed for organization basis</Callout>
+<Callout icon="dollar-sign" color="#407C8F" iconType="regular">Billing is calculated on a per-organization basis. Each user is entitled to create and manage up to two organizations at no cost.</Callout>
 
-Create a new mock API by selecting a project and providing a name. Optionally, add a description.
-
-<Frame>
-  <img src="/images/create-mock-api-modal.png" alt="Screenshot of mock api create modal." style={{ borderRadius: '0.5rem' }} />
-</Frame>
-
-You'll be redirected to the editor view.
+To create a new mock API, select a project and provide a name.
 
 <Frame>
-  <img src="/images/mock-api-editor-page.png" alt="Screenshot of mock api editor page." style={{ borderRadius: '0.5rem' }} />
+  <img src="/images/create-mock-api-modal.png" alt="Screenshot of mock API creation modal." style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
-Generate data by chatting with the system. Provide details for your dataset, e.g., "Create 10 users for an ecommerce clothing store application."
+You will then be redirected to the editor interface.
 
 <Frame>
-  <img src="/images/mock-api-editor-with-data-page.png" alt="Screenshot of mock api editor page." style={{ borderRadius: '0.5rem' }} />
+  <img src="/images/mock-api-editor-page.png" alt="Screenshot of mock API editor page." style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
-
-Refine the dataset via additional chats if needed. Once satisfied, click "Save Endpoint" to persist changes.
-Access the data by visiting the provided URL or sending an HTTP request to the endpoint.
-
-<Danger>By default, endpoints are private, requiring an auth token via query parameters to prevent accidental exposure. Make them public via settings if desired.</Danger>
+Generate data through a simple chat conversation. For example you can specify “Create 10 users for an e-commerce clothing store application.”
 
 <Frame>
-  <img src="/images/mock-api-editor-url.png" alt="Screenshot of mock api editor page." style={{ borderRadius: '0.5rem' }} />
+  <img src="/images/mock-api-editor-with-data-page.png" alt="Screenshot of mock API editor page with data." style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
-Visit the endpoint to retrieve results.
+Refine your dataset through additional interactions as needed. Once finalized, click "Save Endpoint" to persist your changes. You can access the data by visiting the provided URL or sending an HTTP request to the endpoint.
+
+<Danger>By default, endpoints are private and require an authentication token via query parameters to prevent unauthorized access. You can make them public through the settings if necessary.</Danger>
 
 <Frame>
-  <img src="/images/api-json-result.png" alt="Screenshot of mock api editor page." style={{ borderRadius: '0.5rem' }} />
+  <img src="/images/mock-api-editor-url.png" alt="Screenshot of mock API editor URL." style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
+Visit the endpoint to retrieve the generated data.
 
-## Next steps
+<Frame>
+  <img src="/images/api-json-result.png" alt="Screenshot of API JSON result." style={{ borderRadius: '0.5rem' }} />
+</Frame>
 
-Now that you have your first mock api running, explore these key features
+## Next Steps
+
+With your first mock API up and running, explore these key features:
 
 <CardGroup cols={2}>
 
-<Card title="BYOD" icon="pen-to-square" href="/features/byod">
-  Upload and use your existing datasets seamlessly within MocklyAPI.
+<Card title="Bring Your Own Data (BYOD)" icon="pen-to-square" href="/features/byod">
+  Seamlessly upload and utilize your existing datasets within MocklyAPI.
 </Card>
 
-<Card title="Private endpoint" icon="palette" href="/features/private-endpoints">
-  Secure your mock APIs with private endpoints and auth tokens.
+<Card title="Private Endpoints" icon="lock" href="/features/private-endpoints">
+  Secure your mock APIs with private endpoints and authentication tokens.
 </Card>
 
-<Card title="Additional Configurations" icon="square-code" href="/features/additional-configs">
-  Fine-tune response formats, latency, and more for realistic simulations.
+<Card title="Advanced Configurations" icon="square-code" href="/features/additional-configs">
+  Customize response formats, latency, and other parameters for realistic simulations.
 </Card>
 
-<Card title="Ai mock data generation" icon="code" href="/api-reference/introduction">
-  Create realistic, structured datasets instantly with simple chat-based prompts. 
+<Card title="AI-Powered Data Generation" icon="sparkles" href="/api-reference/introduction">
+  Instantly generate realistic, structured datasets using simple chat-based prompts.
 </Card>
 
 </CardGroup>
-
-{/* <Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
-</Note> */}

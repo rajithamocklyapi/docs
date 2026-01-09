@@ -1,23 +1,24 @@
 ---
-title: 'Private endpoints'
-description: 'MocklyAPI gives authorized access to your mock apis'
+title: 'Private Endpoints'
+description: 'MocklyAPI provides secure access to your mock APIs'
 icon: 'lock'
 ---
 
-MocklyAPI provide private endpoints to make your mock api endpoints secure.
+MocklyAPI offers private endpoints to ensure the security of your mock API endpoints.
 
-Once private endpoint is enabled to access your mock api you need to pass `auth_token` as query parameter to your endpoint.
+When private endpoints are enabled, requests must include a valid `auth_token` as a query parameter or the `mocklyapiauthtoken` header to access the mock API.
 
-<Note>This option is enabled by default to protect you mock api endpoints.</Note>
-
-<Frame>
-  <img src="/images/private-endpoint-token.png" alt="private endpoint settings token view." style={{ borderRadius: '0.5rem' }} />
-</Frame>
-
-You can always disable this feature to make your mock api endpoint public.
+<Note>This feature is enabled by default to safeguard your mock API endpoints.</Note>
 
 <Frame>
-  <img src="/images/private-endpoint-settings.png" alt="private endpoint settings modal." style={{ borderRadius: '0.5rem' }} />
+  <img src="/images/private-endpoint-token.png" alt="Private endpoint settings token view." style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
-<Warning>Make sure to save endpoint to make change settings take effect</Warning>
+You have the option to disable this feature if you wish to make your mock API endpoints publicly accessible.
+
+// TODO
+{/* <Frame>
+  <img src="/images/private-endpoint-settings.png" alt="Private endpoint settings modal." style={{ borderRadius: '0.5rem' }} />
+</Frame> */}
+
+<Warning>Ensure you save the endpoint settings for the changes to take effect.</Warning>

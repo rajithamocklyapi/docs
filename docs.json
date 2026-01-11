@@ -26,7 +26,8 @@
               "features/byod",
               "features/private-endpoints",
               "features/additional-configs",
-              "features/chat"
+              "features/chat",
+              "features/data-filtering-ordering-limiting"
             ]
           },
           {

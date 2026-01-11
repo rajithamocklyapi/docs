@@ -24,6 +24,42 @@
             }
           },
           {
+            "name": "filters",
+            "in": "query",
+            "required": false,
+            "description": "Filters to apply on the mock data",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "required": false,
+            "description": "Order by field",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "order_direction",
+            "in": "query",
+            "required": false,
+            "description": "Order by direction (asc or desc)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "description": "Limit the number of results",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
             "name": "mockApiId",
             "in": "path",
             "required": true,
@@ -34,7 +70,7 @@
             }
           },
           {
-            "name": "api-key",
+            "name": "mocklyapiauthtoken",
             "in": "header",
             "description": "Authentication token is required for private endpoints",
             "required": false,

@@ -1,0 +1,428 @@
+---
+title: 'Data Filtering, Ordering and Limiting'
+description: 'MocklyAPI gives you the ability to filter, order and limit data from your mock endpoints'
+icon: 'filter-list'
+---
+
+## Overview
+
+MocklyAPI provides powerful query capabilities for JSON array responses. You can filter, sort, and limit your mock data using URL query parameters.
+
+**Operations are applied in this order:**
+1. **Filtering** - Narrow down results based on conditions
+2. **Ordering** - Sort the filtered results
+3. **Limiting** - Restrict the number of results returned
+
+<Note>
+  These operations only work when your mock data is a **JSON array**. Single objects or non-JSON responses will be returned as-is.
+</Note>
+
+---
+
+## Query Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `filters` | string | URL-encoded filter conditions (supports nested paths) |
+| `order_by` | string | Field name to sort by (supports nested paths) |
+| `order_direction` | string | Sort direction: `asc` or `desc` (default: `asc`) |
+| `limit` | number | Maximum number of results to return (minimum: 0) |
+
+---
+
+## Filtering
+
+Apply conditions to narrow down your results using the `filters` query parameter.
+
+### Supported Operators
+
+| Operator | Description | Case Sensitive |
+|----------|-------------|----------------|
+| `$eq` | Equals | Yes |
+| `$eqi` | Equals (case-insensitive) | No |
+| `$ne` | Not equals | Yes |
+| `$nei` | Not equals (case-insensitive) | No |
+| _(implicit)_ | Direct equality (no operator) | Yes |
+
+### Filter Syntax
+
+Filters use query string format and support:
+- Simple equality: `filters=status=active`
+- Operators: `filters=status[$eq]=active`
+- Multiple conditions (AND logic): `filters=status=active&role=admin`
+- Nested fields: `filters=user.name=John`
+
+### Filter Examples
+
+**Simple equality:**
+```bash
+GET /api/{mockApiId}?filters=status=active
+```
+
+**Case-insensitive matching:**
+```bash
+GET /api/{mockApiId}?filters=email[$eqi]=JOHN@EXAMPLE.COM
+```
+
+**Multiple conditions (AND):**
+```bash
+GET /api/{mockApiId}?filters=status=active&role=admin
+```
+
+**Not equals:**
+```bash
+GET /api/{mockApiId}?filters=status[$ne]=archived
+```
+
+**Nested field filtering:**
+```bash
+GET /api/{mockApiId}?filters=profile.country=USA
+```
+
+---
+
+## Ordering
+
+Sort your results by any field using `order_by` and `order_direction` parameters.
+
+### Syntax
+```bash
+GET /api/{mockApiId}?order_by=createdAt&order_direction=desc
+```
+
+### Examples
+
+**Ascending order (default):**
+```bash
+GET /api/{mockApiId}?order_by=name
+```
+
+**Descending order:**
+```bash
+GET /api/{mockApiId}?order_by=age&order_direction=desc
+```
+
+**Sort nested fields:**
+```bash
+GET /api/{mockApiId}?order_by=user.firstName&order_direction=asc
+```
+
+---
+
+## Limiting
+
+Restrict the number of results returned using the `limit` parameter.
+
+### Syntax
+```bash
+GET /api/{mockApiId}?limit=10
+```
+
+### Examples
+
+**Get first 5 results:**
+```bash
+GET /api/{mockApiId}?limit=5
+```
+
+**No limit (return all):**
+```bash
+GET /api/{mockApiId}
+```
+
+<Warning>
+  The limit is applied **after** filtering and ordering. Set `limit=0` to return an empty array.
+</Warning>
+
+---
+
+## Combining Operations
+
+You can combine filtering, ordering, and limiting in a single request.
+
+### Example Request
+```bash
+GET /api/{mockApiId}?filters=status=active&role=user&order_by=createdAt&order_direction=desc&limit=3
+```
+
+This will:
+1. Filter for records where `status` is "active" AND `role` is "user"
+2. Sort by `createdAt` in descending order
+3. Return only the first 3 results
+
+---
+
+## Complete Example
+
+### Sample Dataset
+```json
+[
+  {
+    "id": 1,
+    "name": "Alice Johnson",
+    "email": "alice@example.com",
+    "status": "active",
+    "role": "admin",
+    "age": 32,
+    "createdAt": "2024-01-15"
+  },
+  {
+    "id": 2,
+    "name": "Bob Smith",
+    "email": "bob@example.com",
+    "status": "active",
+    "role": "user",
+    "age": 28,
+    "createdAt": "2024-02-20"
+  },
+  {
+    "id": 3,
+    "name": "Charlie Brown",
+    "email": "CHARLIE@EXAMPLE.COM",
+    "status": "inactive",
+    "role": "user",
+    "age": 45,
+    "createdAt": "2024-01-10"
+  },
+  {
+    "id": 4,
+    "name": "Diana Prince",
+    "email": "diana@example.com",
+    "status": "active",
+    "role": "user",
+    "age": 35,
+    "createdAt": "2024-03-05"
+  },
+  {
+    "id": 5,
+    "name": "Eve Adams",
+    "email": "eve@example.com",
+    "status": "active",
+    "role": "admin",
+    "age": 29,
+    "createdAt": "2024-02-28"
+  }
+]
+```
+
+### Query Examples & Results
+
+**Example 1: Filter active users**
+```bash
+GET /api/{mockApiId}?filters=status=active&role=user
+```
+
+**Result:**
+```json
+[
+  {
+    "id": 2,
+    "name": "Bob Smith",
+    "email": "bob@example.com",
+    "status": "active",
+    "role": "user",
+    "age": 28,
+    "createdAt": "2024-02-20"
+  },
+  {
+    "id": 4,
+    "name": "Diana Prince",
+    "email": "diana@example.com",
+    "status": "active",
+    "role": "user",
+    "age": 35,
+    "createdAt": "2024-03-05"
+  }
+]
+```
+
+---
+
+**Example 2: Order by age descending**
+```bash
+GET /api/{mockApiId}?order_by=age&order_direction=desc
+```
+
+**Result:**
+```json
+[
+  {
+    "id": 3,
+    "name": "Charlie Brown",
+    "email": "CHARLIE@EXAMPLE.COM",
+    "status": "inactive",
+    "role": "user",
+    "age": 45,
+    "createdAt": "2024-01-10"
+  },
+  {
+    "id": 4,
+    "name": "Diana Prince",
+    "email": "diana@example.com",
+    "status": "active",
+    "role": "user",
+    "age": 35,
+    "createdAt": "2024-03-05"
+  },
+  {
+    "id": 1,
+    "name": "Alice Johnson",
+    "email": "alice@example.com",
+    "status": "active",
+    "role": "admin",
+    "age": 32,
+    "createdAt": "2024-01-15"
+  },
+  {
+    "id": 5,
+    "name": "Eve Adams",
+    "email": "eve@example.com",
+    "status": "active",
+    "role": "admin",
+    "age": 29,
+    "createdAt": "2024-02-28"
+  },
+  {
+    "id": 2,
+    "name": "Bob Smith",
+    "email": "bob@example.com",
+    "status": "active",
+    "role": "user",
+    "age": 28,
+    "createdAt": "2024-02-20"
+  }
+]
+```
+
+---
+
+**Example 3: Active users, newest first, limit 2**
+```bash
+GET /api/{mockApiId}?filters=status=active&order_by=createdAt&order_direction=desc&limit=2
+```
+
+**Result:**
+```json
+[
+  {
+    "id": 4,
+    "name": "Diana Prince",
+    "email": "diana@example.com",
+    "status": "active",
+    "role": "user",
+    "age": 35,
+    "createdAt": "2024-03-05"
+  },
+  {
+    "id": 5,
+    "name": "Eve Adams",
+    "email": "eve@example.com",
+    "status": "active",
+    "role": "admin",
+    "age": 29,
+    "createdAt": "2024-02-28"
+  }
+]
+```
+
+---
+
+**Example 4: Case-insensitive email search**
+```bash
+GET /api/{mockApiId}?filters=email[$eqi]=charlie@example.com
+```
+
+**Result:**
+```json
+[
+  {
+    "id": 3,
+    "name": "Charlie Brown",
+    "email": "CHARLIE@EXAMPLE.COM",
+    "status": "inactive",
+    "role": "user",
+    "age": 45,
+    "createdAt": "2024-01-10"
+  }
+]
+```
+
+---
+
+**Example 5: Exclude admins, youngest first**
+```bash
+GET /api/{mockApiId}?filters=role[$ne]=admin&order_by=age&order_direction=asc
+```
+
+**Result:**
+```json
+[
+  {
+    "id": 2,
+    "name": "Bob Smith",
+    "email": "bob@example.com",
+    "status": "active",
+    "role": "user",
+    "age": 28,
+    "createdAt": "2024-02-20"
+  },
+  {
+    "id": 4,
+    "name": "Diana Prince",
+    "email": "diana@example.com",
+    "status": "active",
+    "role": "user",
+    "age": 35,
+    "createdAt": "2024-03-05"
+  },
+  {
+    "id": 3,
+    "name": "Charlie Brown",
+    "email": "CHARLIE@EXAMPLE.COM",
+    "status": "inactive",
+    "role": "user",
+    "age": 45,
+    "createdAt": "2024-01-10"
+  }
+]
+```
+
+---
+
+## Limitations & Conditions
+
+<Warning>
+  **Important Constraints:**
+</Warning>
+
+- **JSON Arrays Only**: Operations only apply to JSON array responses. Single objects are returned unchanged.
+- **AND Logic**: Multiple filter conditions use AND logic (all must match). OR logic is not supported.
+- **Supported Operators**: Only `$eq`, `$eqi`, `$ne`, `$nei` are supported. Other operators will result an error.
+- **Nested Path Support**: Use dot notation for nested fields (e.g., `user.profile.age`)
+
+---
+
+## Error Examples
+
+**Unsupported operator:**
+```bash
+GET /api/{mockApiId}?filters=age[$gt]=30
+# Error: Unsupported operator: $gt
+```
+
+**Invalid limit:**
+```bash
+GET /api/{mockApiId}?limit=-5
+# Error: limit must be >= 0
+```
+
+---
+
+## Tips & Best Practices
+
+<Tip>
+  - **URL Encode**: Always URL-encode your filter strings when making requests from code
+  - **Test Incrementally**: Test filters, ordering, and limits separately before combining
+  - **Nested Fields**: Take advantage of dot notation for complex data structures
+  - **Performance**: Limiting results can improve response times for large datasets
+</Tip>

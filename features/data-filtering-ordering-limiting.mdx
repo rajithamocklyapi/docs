@@ -152,55 +152,102 @@ This will:
 
 ---
 
-## Complete Example
+## Example usage
 
 ### Sample Dataset
+
+This dataset demonstrates both simple fields and nested object structures:
 ```json
 [
   {
     "id": 1,
-    "name": "Alice Johnson",
+    "username": "alice_admin",
     "email": "alice@example.com",
     "status": "active",
     "role": "admin",
     "age": 32,
-    "createdAt": "2024-01-15"
+    "createdAt": "2024-01-15",
+    "profile": {
+      "firstName": "Alice",
+      "lastName": "Johnson",
+      "address": {
+        "city": "New York",
+        "country": "USA",
+        "zipCode": "10001"
+      }
+    }
   },
   {
     "id": 2,
-    "name": "Bob Smith",
+    "username": "bob_user",
     "email": "bob@example.com",
     "status": "active",
     "role": "user",
     "age": 28,
-    "createdAt": "2024-02-20"
+    "createdAt": "2024-02-20",
+    "profile": {
+      "firstName": "Bob",
+      "lastName": "Smith",
+      "address": {
+        "city": "London",
+        "country": "UK",
+        "zipCode": "SW1A 1AA"
+      }
+    }
   },
   {
     "id": 3,
-    "name": "Charlie Brown",
+    "username": "charlie_inactive",
     "email": "CHARLIE@EXAMPLE.COM",
     "status": "inactive",
     "role": "user",
     "age": 45,
-    "createdAt": "2024-01-10"
+    "createdAt": "2024-01-10",
+    "profile": {
+      "firstName": "Charlie",
+      "lastName": "Brown",
+      "address": {
+        "city": "Paris",
+        "country": "France",
+        "zipCode": "75001"
+      }
+    }
   },
   {
     "id": 4,
-    "name": "Diana Prince",
+    "username": "diana_user",
     "email": "diana@example.com",
     "status": "active",
     "role": "user",
     "age": 35,
-    "createdAt": "2024-03-05"
+    "createdAt": "2024-03-05",
+    "profile": {
+      "firstName": "Diana",
+      "lastName": "Prince",
+      "address": {
+        "city": "San Francisco",
+        "country": "USA",
+        "zipCode": "94102"
+      }
+    }
   },
   {
     "id": 5,
-    "name": "Eve Adams",
+    "username": "eve_admin",
     "email": "eve@example.com",
     "status": "active",
     "role": "admin",
     "age": 29,
-    "createdAt": "2024-02-28"
+    "createdAt": "2024-02-28",
+    "profile": {
+      "firstName": "Eve",
+      "lastName": "Adams",
+      "address": {
+        "city": "Toronto",
+        "country": "Canada",
+        "zipCode": "M5H 2N2"
+      }
+    }
   }
 ]
 ```
@@ -217,21 +264,39 @@ GET /api/{mockApiId}?filters=status=active&role=user
 [
   {
     "id": 2,
-    "name": "Bob Smith",
+    "username": "bob_user",
     "email": "bob@example.com",
     "status": "active",
     "role": "user",
     "age": 28,
-    "createdAt": "2024-02-20"
+    "createdAt": "2024-02-20",
+    "profile": {
+      "firstName": "Bob",
+      "lastName": "Smith",
+      "address": {
+        "city": "London",
+        "country": "UK",
+        "zipCode": "SW1A 1AA"
+      }
+    }
   },
   {
     "id": 4,
-    "name": "Diana Prince",
+    "username": "diana_user",
     "email": "diana@example.com",
     "status": "active",
     "role": "user",
     "age": 35,
-    "createdAt": "2024-03-05"
+    "createdAt": "2024-03-05",
+    "profile": {
+      "firstName": "Diana",
+      "lastName": "Prince",
+      "address": {
+        "city": "San Francisco",
+        "country": "USA",
+        "zipCode": "94102"
+      }
+    }
   }
 ]
 ```
@@ -248,48 +313,93 @@ GET /api/{mockApiId}?order_by=age&order_direction=desc
 [
   {
     "id": 3,
-    "name": "Charlie Brown",
+    "username": "charlie_inactive",
     "email": "CHARLIE@EXAMPLE.COM",
     "status": "inactive",
     "role": "user",
     "age": 45,
-    "createdAt": "2024-01-10"
+    "createdAt": "2024-01-10",
+    "profile": {
+      "firstName": "Charlie",
+      "lastName": "Brown",
+      "address": {
+        "city": "Paris",
+        "country": "France",
+        "zipCode": "75001"
+      }
+    }
   },
   {
     "id": 4,
-    "name": "Diana Prince",
+    "username": "diana_user",
     "email": "diana@example.com",
     "status": "active",
     "role": "user",
     "age": 35,
-    "createdAt": "2024-03-05"
+    "createdAt": "2024-03-05",
+    "profile": {
+      "firstName": "Diana",
+      "lastName": "Prince",
+      "address": {
+        "city": "San Francisco",
+        "country": "USA",
+        "zipCode": "94102"
+      }
+    }
   },
   {
     "id": 1,
-    "name": "Alice Johnson",
+    "username": "alice_admin",
     "email": "alice@example.com",
     "status": "active",
     "role": "admin",
     "age": 32,
-    "createdAt": "2024-01-15"
+    "createdAt": "2024-01-15",
+    "profile": {
+      "firstName": "Alice",
+      "lastName": "Johnson",
+      "address": {
+        "city": "New York",
+        "country": "USA",
+        "zipCode": "10001"
+      }
+    }
   },
   {
     "id": 5,
-    "name": "Eve Adams",
+    "username": "eve_admin",
     "email": "eve@example.com",
     "status": "active",
     "role": "admin",
     "age": 29,
-    "createdAt": "2024-02-28"
+    "createdAt": "2024-02-28",
+    "profile": {
+      "firstName": "Eve",
+      "lastName": "Adams",
+      "address": {
+        "city": "Toronto",
+        "country": "Canada",
+        "zipCode": "M5H 2N2"
+      }
+    }
   },
   {
     "id": 2,
-    "name": "Bob Smith",
+    "username": "bob_user",
     "email": "bob@example.com",
     "status": "active",
     "role": "user",
     "age": 28,
-    "createdAt": "2024-02-20"
+    "createdAt": "2024-02-20",
+    "profile": {
+      "firstName": "Bob",
+      "lastName": "Smith",
+      "address": {
+        "city": "London",
+        "country": "UK",
+        "zipCode": "SW1A 1AA"
+      }
+    }
   }
 ]
 ```
@@ -306,21 +416,39 @@ GET /api/{mockApiId}?filters=status=active&order_by=createdAt&order_direction=de
 [
   {
     "id": 4,
-    "name": "Diana Prince",
+    "username": "diana_user",
     "email": "diana@example.com",
     "status": "active",
     "role": "user",
     "age": 35,
-    "createdAt": "2024-03-05"
+    "createdAt": "2024-03-05",
+    "profile": {
+      "firstName": "Diana",
+      "lastName": "Prince",
+      "address": {
+        "city": "San Francisco",
+        "country": "USA",
+        "zipCode": "94102"
+      }
+    }
   },
   {
     "id": 5,
-    "name": "Eve Adams",
+    "username": "eve_admin",
     "email": "eve@example.com",
     "status": "active",
     "role": "admin",
     "age": 29,
-    "createdAt": "2024-02-28"
+    "createdAt": "2024-02-28",
+    "profile": {
+      "firstName": "Eve",
+      "lastName": "Adams",
+      "address": {
+        "city": "Toronto",
+        "country": "Canada",
+        "zipCode": "M5H 2N2"
+      }
+    }
   }
 ]
 ```
@@ -337,12 +465,21 @@ GET /api/{mockApiId}?filters=email[$eqi]=charlie@example.com
 [
   {
     "id": 3,
-    "name": "Charlie Brown",
+    "username": "charlie_inactive",
     "email": "CHARLIE@EXAMPLE.COM",
     "status": "inactive",
     "role": "user",
     "age": 45,
-    "createdAt": "2024-01-10"
+    "createdAt": "2024-01-10",
+    "profile": {
+      "firstName": "Charlie",
+      "lastName": "Brown",
+      "address": {
+        "city": "Paris",
+        "country": "France",
+        "zipCode": "75001"
+      }
+    }
   }
 ]
 ```
@@ -359,33 +496,182 @@ GET /api/{mockApiId}?filters=role[$ne]=admin&order_by=age&order_direction=asc
 [
   {
     "id": 2,
-    "name": "Bob Smith",
+    "username": "bob_user",
     "email": "bob@example.com",
     "status": "active",
     "role": "user",
     "age": 28,
-    "createdAt": "2024-02-20"
+    "createdAt": "2024-02-20",
+    "profile": {
+      "firstName": "Bob",
+      "lastName": "Smith",
+      "address": {
+        "city": "London",
+        "country": "UK",
+        "zipCode": "SW1A 1AA"
+      }
+    }
   },
   {
     "id": 4,
-    "name": "Diana Prince",
+    "username": "diana_user",
     "email": "diana@example.com",
     "status": "active",
     "role": "user",
     "age": 35,
-    "createdAt": "2024-03-05"
+    "createdAt": "2024-03-05",
+    "profile": {
+      "firstName": "Diana",
+      "lastName": "Prince",
+      "address": {
+        "city": "San Francisco",
+        "country": "USA",
+        "zipCode": "94102"
+      }
+    }
   },
   {
     "id": 3,
-    "name": "Charlie Brown",
+    "username": "charlie_inactive",
     "email": "CHARLIE@EXAMPLE.COM",
     "status": "inactive",
     "role": "user",
     "age": 45,
-    "createdAt": "2024-01-10"
+    "createdAt": "2024-01-10",
+    "profile": {
+      "firstName": "Charlie",
+      "lastName": "Brown",
+      "address": {
+        "city": "Paris",
+        "country": "France",
+        "zipCode": "75001"
+      }
+    }
   }
 ]
 ```
+
+---
+
+**Example 6: Filter by country USA (Nested path)**
+```bash
+GET /api/{mockApiId}?filters=profile.address.country=USA
+```
+
+**Result:**
+```json
+[
+  {
+    "id": 1,
+    "username": "alice_admin",
+    "email": "alice@example.com",
+    "status": "active",
+    "role": "admin",
+    "age": 32,
+    "createdAt": "2024-01-15",
+    "profile": {
+      "firstName": "Alice",
+      "lastName": "Johnson",
+      "address": {
+        "city": "New York",
+        "country": "USA",
+        "zipCode": "10001"
+      }
+    }
+  },
+  {
+    "id": 4,
+    "username": "diana_user",
+    "email": "diana@example.com",
+    "status": "active",
+    "role": "user",
+    "age": 35,
+    "createdAt": "2024-03-05",
+    "profile": {
+      "firstName": "Diana",
+      "lastName": "Prince",
+      "address": {
+        "city": "San Francisco",
+        "country": "USA",
+        "zipCode": "94102"
+      }
+    }
+  }
+]
+```
+
+---
+
+**Example 7: Order by first name ascending (Nested path)**
+```bash
+GET /api/{mockApiId}?order_by=profile.firstName&order_direction=asc&limit=3
+```
+
+**Result:**
+```json
+[
+  {
+    "id": 1,
+    "username": "alice_admin",
+    "email": "alice@example.com",
+    "status": "active",
+    "role": "admin",
+    "age": 32,
+    "createdAt": "2024-01-15",
+    "profile": {
+      "firstName": "Alice",
+      "lastName": "Johnson",
+      "address": {
+        "city": "New York",
+        "country": "USA",
+        "zipCode": "10001"
+      }
+    }
+  },
+  {
+    "id": 2,
+    "username": "bob_user",
+    "email": "bob@example.com",
+    "status": "active",
+    "role": "user",
+    "age": 28,
+    "createdAt": "2024-02-20",
+    "profile": {
+      "firstName": "Bob",
+      "lastName": "Smith",
+      "address": {
+        "city": "London",
+        "country": "UK",
+        "zipCode": "SW1A 1AA"
+      }
+    }
+  },
+  {
+    "id": 3,
+    "username": "charlie_inactive",
+    "email": "CHARLIE@EXAMPLE.COM",
+    "status": "inactive",
+    "role": "user",
+    "age": 45,
+    "createdAt": "2024-01-10",
+    "profile": {
+      "firstName": "Charlie",
+      "lastName": "Brown",
+      "address": {
+        "city": "Paris",
+        "country": "France",
+        "zipCode": "75001"
+      }
+    }
+  }
+]
+```
+
+<Note>
+  **Nested Path Support:**
+  - Use dot notation to access nested properties at any depth (e.g., `profile.address.city`)
+  - Ordering supports nested paths for both ascending and descending sorts
+</Note>
 
 ---
 

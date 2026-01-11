@@ -23,11 +23,11 @@
           {
             "group": "Features",
             "pages": [
-              "features/byod",
-              "features/private-endpoints",
-              "features/additional-configs",
               "features/chat",
-              "features/data-filtering-ordering-limiting"
+              "features/private-endpoints",
+              "features/byod",
+              "features/data-filtering-ordering-limiting",
+              "features/additional-configs"
             ]
           },
           {

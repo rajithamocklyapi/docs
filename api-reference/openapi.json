@@ -2,155 +2,335 @@
   "openapi": "3.1.0",
   "info": {
     "title": "MocklyAPI",
-    "description": "API documentation",
+    "description": "API documentation for MocklyAPI - Create and manage mock API endpoints",
     "version": "1.0.0"
   },
   "servers": [
     {
-      "url": "https://api.mocklyapi.com"
+      "url": "https://api.mocklyapi.com",
+      "description": "Production server"
     }
   ],
   "paths": {
     "/mock/{mockApiId}": {
       "get": {
+        "summary": "Get mock API data",
+        "description": "Retrieve mock data from a specific mock API endpoint. Supports filtering, ordering, and limiting results.",
+        "operationId": "getMockData",
+        "tags": ["Mock API"],
         "parameters": [
+          {
+            "name": "mockApiId",
+            "in": "path",
+            "required": true,
+            "description": "Unique identifier for the mock API",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          {
+            "name": "mocklyapiauthtoken",
+            "in": "header",
+            "required": false,
+            "description": "Authentication token required for private endpoints. Can also be provided via query parameter.",
+            "schema": {
+              "type": "string"
+            },
+            "example": "your-auth-token-here"
+          },
           {
             "name": "auth_token",
             "in": "query",
             "required": false,
-            "description": "Authentication token is required for private endpoints",
+            "description": "Authentication token required for private endpoints. Can also be provided via header.",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "your-auth-token-here"
           },
           {
             "name": "filters",
             "in": "query",
             "required": false,
-            "description": "Filters to apply on the mock data",
+            "description": "URL-encoded filter conditions to apply on the mock data. Supports operators: $eq, $eqi, $ne, $nei. Multiple conditions are combined with AND logic.",
             "schema": {
               "type": "string"
+            },
+            "examples": {
+              "simple": {
+                "value": "status%3Dactive",
+                "summary": "Simple equality filter",
+                "description": "Filter where status equals 'active'"
+              },
+              "multiple": {
+                "value": "status%3Dactive%26role%3Duser",
+                "summary": "Multiple filters",
+                "description": "Filter where status is 'active' AND role is 'user'"
+              },
+              "operator": {
+                "value": "email%5B%24eqi%5D%3Djohn%40example.com",
+                "summary": "Case-insensitive filter",
+                "description": "Case-insensitive email filter"
+              },
+              "nested": {
+                "value": "profile.address.country%3DUSA",
+                "summary": "Nested field filter",
+                "description": "Filter on nested object property"
+              }
             }
           },
           {
             "name": "order_by",
             "in": "query",
             "required": false,
-            "description": "Order by field",
+            "description": "Field name to sort results by. Supports nested paths using dot notation (e.g., 'profile.firstName').",
             "schema": {
               "type": "string"
+            },
+            "examples": {
+              "simple": {
+                "value": "createdAt",
+                "summary": "Order by top-level field"
+              },
+              "nested": {
+                "value": "profile.age",
+                "summary": "Order by nested field"
+              }
             }
           },
           {
             "name": "order_direction",
             "in": "query",
             "required": false,
-            "description": "Order by direction (asc or desc)",
+            "description": "Sort direction for the order_by field",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": ["asc", "desc"],
+              "default": "asc"
+            },
+            "examples": {
+              "ascending": {
+                "value": "asc",
+                "summary": "Ascending order"
+              },
+              "descending": {
+                "value": "desc",
+                "summary": "Descending order"
+              }
             }
           },
           {
             "name": "limit",
             "in": "query",
             "required": false,
-            "description": "Limit the number of results",
+            "description": "Maximum number of results to return. Must be 0 or greater.",
             "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "mockApiId",
-            "in": "path",
-            "required": true,
-            "description": "Mock api unique id",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          {
-            "name": "mocklyapiauthtoken",
-            "in": "header",
-            "description": "Authentication token is required for private endpoints",
-            "required": false,
-            "schema": {
-              "type": "string"
+              "type": "number",
+              "minimum": 0
+            },
+            "examples": {
+              "ten": {
+                "value": 10,
+                "summary": "Limit to 10 results"
+              },
+              "hundred": {
+                "value": 100,
+                "summary": "Limit to 100 results"
+              }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Success Response",
+            "description": "Successful response with mock data",
             "content": {
               "application/json": {
-          "schema": {
-            "type": "array"
-          }
-              }
-            }
-          },
-          "401": {
-            "description": "Auth token not found or Invalid auth token",
-            "content": {
-              "application/json": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "error": {
-                "type": "string",
-                "example": "Auth token not found or Invalid auth token"
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "description": "Mock data object with dynamic properties"
+                  }
+                },
+                "examples": {
+                  "users": {
+                    "summary": "Example user data",
+                    "value": [
+                      {
+                        "id": 1,
+                        "username": "alice_admin",
+                        "email": "alice@example.com",
+                        "status": "active",
+                        "role": "admin",
+                        "age": 32,
+                        "createdAt": "2024-01-15",
+                        "profile": {
+                          "firstName": "Alice",
+                          "lastName": "Johnson",
+                          "address": {
+                            "city": "New York",
+                            "country": "USA",
+                            "zipCode": "10001"
+                          }
+                        }
+                      },
+                      {
+                        "id": 2,
+                        "username": "bob_user",
+                        "email": "bob@example.com",
+                        "status": "active",
+                        "role": "user",
+                        "age": 28,
+                        "createdAt": "2024-02-20",
+                        "profile": {
+                          "firstName": "Bob",
+                          "lastName": "Smith",
+                          "address": {
+                            "city": "London",
+                            "country": "UK",
+                            "zipCode": "SW1A 1AA"
+                          }
+                        }
+                      }
+                    ]
                   }
                 }
-              }
-              }
-            }
-          },
-          "405": {
-            "description": "Invalid Method",
-            "content": {
-              "application/json": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "error": {
-                "type": "string",
-                "example": "Invalid Method"
-                  }
-                }
-              }
-              }
-            }
-          },
-          "404": {
-            "description": "Mock api not found",
-            "content": {
-              "application/json": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "error": {
-                "type": "string",
-                "example": "Mock api not found"
-                  }
-                }
-              }
               }
             }
           },
           "400": {
-            "description": "Monthly quota exceeded",
+            "description": "Bad request - Invalid parameters or monthly quota exceeded",
             "content": {
               "application/json": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "error": {
-                "type": "string",
-                "example": "Monthly quota exceeded"
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"]
+                },
+                "examples": {
+                  "quotaExceeded": {
+                    "summary": "Monthly quota exceeded",
+                    "value": {
+                      "error": "Monthly quota exceeded"
+                    }
+                  },
+                  "invalidLimit": {
+                    "summary": "Invalid limit parameter",
+                    "value": {
+                      "error": "Limit must be 0 or greater"
+                    }
+                  },
+                  "unsupportedOperator": {
+                    "summary": "Unsupported filter operator",
+                    "value": {
+                      "error": "Unsupported operator: $gt"
+                    }
                   }
                 }
               }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Authentication token not found or invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"]
+                },
+                "examples": {
+                  "tokenNotFound": {
+                    "summary": "Auth token not provided",
+                    "value": {
+                      "error": "Auth token not found"
+                    }
+                  },
+                  "invalidToken": {
+                    "summary": "Invalid auth token",
+                    "value": {
+                      "error": "Invalid auth token"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found - Mock API does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"]
+                },
+                "example": {
+                  "error": "Mock api not found"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Method not allowed - Invalid HTTP method",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"]
+                },
+                "example": {
+                  "error": "Invalid Method"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests - Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"]
+                },
+                "examples": {
+                  "rateLimit": {
+                    "summary": "Rate limit exceeded",
+                    "value": {
+                      "error": "Rate limit exceeded. Maximum 100 requests per minute."
+                    }
+                  },
+                  "monthlyQuota": {
+                    "summary": "Monthly quota exceeded",
+                    "value": {
+                      "error": "Monthly request quota exceeded"
+                    }
+                  }
+                }
               }
             }
           }
@@ -159,11 +339,49 @@
     }
   },
   "components": {
-    "securitySchemes": {}
+    "securitySchemes": {
+      "AuthToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "mocklyapiauthtoken",
+        "description": "Authentication token for private mock API endpoints"
+      },
+      "QueryAuthToken": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "auth_token",
+        "description": "Authentication token for private mock API endpoints (alternative to header)"
+      }
+    },
+    "schemas": {
+      "MockDataArray": {
+        "type": "array",
+        "description": "Array of mock data objects",
+        "items": {
+          "type": "object",
+          "description": "Mock data object with dynamic properties based on your mock API configuration"
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Error message describing what went wrong"
+          }
+        },
+        "required": ["error"]
+      }
+    }
   },
-  "security": [],
+  "tags": [
+    {
+      "name": "Mock API",
+      "description": "Operations for retrieving mock API data"
+    }
+  ],
   "externalDocs": {
-    "url": "https://swagger.io",
-    "description": "Find more info here"
+    "url": "https://docs.mocklyapi.com",
+    "description": "Full MocklyAPI documentation"
   }
 }

@@ -1,21 +1,55 @@
 ---
-title: 'Additional configurations'
-description: 'MocklyAPI gives you multiple options to customize you endpoints'
+title: 'Additional Configurations'
+description: 'Customize your MocklyAPI endpoints with flexible configuration options'
 icon: 'gear'
 ---
 
-{/*TODO full page with all configs*/}
-MocklyAPI allows you to customize below configurations in http response.
+## Overview
 
-- Http content type.
-- Http response code.
-- Delay endpoint.
-- Always random data
+MocklyAPI provides multiple configuration options to customize your mock endpoints and simulate real-world API behavior. These settings allow you to control response types, status codes, authentication, delays, and data randomization.
 
-You can customize them using settings in editor view.
+## Available Configurations
 
 <Frame>
-  <img src="/images/mock-api-settings-view.png" alt="Mock api settings view." style={{ borderRadius: '0.5rem' }} />
+  <img src="/images/mock-api-settings-view.png" alt="Mock API settings view showing configuration options" style={{ borderRadius: '0.5rem' }} />
 </Frame>
 
-<Warning>Make sure to save endpoint to make change settings take effect</Warning>
+### Configuration Summary
+
+| Setting | Options | Default | Description |
+|---------|---------|---------|-------------|
+| **HTTP Content Type** | `application/json` | `application/json` | Response content type format |
+| **HTTP Response Code** | `200`, `400`, `500` | `200` | HTTP status code returned |
+| **HTTP Method** | `GET` | `GET` | Allowed HTTP method |
+| **Authentication** | Enabled / Disabled | Enabled | Require auth token for access |
+| **Response Delay** | 0-30 seconds | 0 | Simulate server latency |
+| **Always Random Data** | Enabled / Disabled | Disabled | Generate new random data per request |
+
+
+## Always Random Data
+
+<Card title="Random Data Configuration" icon="shuffle">
+  Generate fresh random data on every request.
+</Card>
+
+### Options
+
+**Disabled (Default)**
+- Returns the same mock data on every request
+- Consistent, predictable responses
+- Ideal for deterministic testing
+
+**Enabled**
+- Generates new random data for each request
+- Different response on every call
+- Useful for testing dynamic UI updates
+
+<Warning>
+  This feature is only available for supported datasets that can be randomly generated. BYOD and some static datasets cannot be randomized.
+</Warning>
+
+
+
+<Warning>
+ Configuration changes only take effect after you click the Save button. Unsaved changes will be lost if you navigate away.
+</Warning>

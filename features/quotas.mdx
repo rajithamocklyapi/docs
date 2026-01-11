@@ -1,25 +1,152 @@
 ---
-title: 'Service quotas'
-description: 'Service quotas for MocklyAPI usage'
-icon: 'traffic-light'
+title: 'Pricing & Service Quotas'
+description: 'Understand MocklyAPI pricing plans and service quotas'
+icon: 'credit-card'
 ---
-{/*TODO full page with all configs*/}
 
-MocklyAPI provided flexible serice quotas based on the pricing plans.
+## Early Access Program
 
-These quotas include.
+<Note>
+  MocklyAPI is currently in **Early Access** and is provided at **no cost** to all users. We appreciate your feedback as we continue to improve the platform.
+</Note>
 
-- Mock api response data character limit.
-- Mock api ai assistant chat message input character limit.
-- Mock api http endpoint rate limit.
-- Mock api http endpoint allocated requests per month.
-- Mock apis per project.
-- Projects per organization.
+We will announce our pricing plans and feature tiers once MocklyAPI becomes generally available. Early access users will be notified in advance of any pricing changes.
 
-Our free plan includes 2 free organizations per user.
+---
 
-## Free
+## Service Quotas
 
-## Pro
+MocklyAPI provides flexible service quotas to ensure optimal performance and fair usage across all users. The following quotas apply during the early access period:
 
-## Enterprise
+### Mock API Quotas
+
+| Quota Type | Limit | Scope |
+|------------|-------|-------|
+| **Mock API Response Data** | 50,000 characters | Per mock API endpoint |
+| **Mock APIs** | 10 APIs | Per project |
+| **HTTP Endpoint Rate Limit** | 100 requests/minute | Per mock API endpoint |
+| **HTTP Monthly Requests** | 50,000 requests/month | Per mock API endpoint |
+| **AI Assistant Input** | 2,000 characters | Per chat message |
+| **AI Assistant Messages** | 100 messages/month | Per mock API endpoint |
+| **Projects** | 3 projects | Per organization |
+| **Free Organizations** | 2 organizations | Per user account |
+
+---
+
+## Quota Details
+
+### Response Data Character Limit
+
+Each mock API can store up to **50,000 characters** of response data. This applies to any type of content that your mock API returns.
+
+**What counts toward this limit:**
+- All characters in your mock response body
+- Whitespace and formatting characters
+- Special characters and unicode
+
+### AI Assistant Message Limits
+
+The AI Assistant helps you generate and refine mock data with intelligent suggestions.
+
+**Input Limit:** 2,000 characters per message
+- This is the maximum length of each message you send to the AI assistant
+- Applies to your prompts and questions
+
+**Monthly Message Quota:** 100 messages per month
+- Resets on the first day of each calendar month
+
+### HTTP Endpoint Rate Limiting
+
+To ensure service stability and fair usage, mock API endpoints have the following limits:
+
+**Rate Limit:** 100 requests per minute
+- Applied per mock API endpoint
+- Requests exceeding this limit receive a `429 Too Many Requests` response
+
+**Monthly Request Quota:** 50,000 requests per month
+- Applied per mock API endpoint
+- Resets on the first day of each calendar month
+- Only successful requests count toward this quota
+
+
+### Projects and Organizations
+
+**Projects per Organization:** 3 projects
+- Each organization can create up to 3 projects
+
+**Free Organizations per User:** 2 organizations
+- Each user account can create or own up to 2 free organizations
+
+## Request Counting Rules
+
+<Info>
+  **Only successful requests count toward your monthly quota.** Failed or rejected requests do not consume your allocation.
+</Info>
+
+### Requests That Count
+
+✅ Successful requests that count toward quota:
+- `200 OK` responses
+- `201 Created` responses
+
+### Requests That Don't Count
+
+❌ The following requests are **excluded** from your quota:
+- **Unauthorized requests** - `401 Unauthorized` responses (invalid or missing auth tokens)
+- **Rate limited requests** - `429 Too Many Requests` responses (exceeded rate limit)
+- **Server errors** - `5xx` responses (service unavailability or internal errors)
+- **Client errors** - `4xx` responses other than 429 which are not explicitly set using settings (malformed requests)
+
+### Example Scenarios
+
+**Scenario 1: Development Testing**
+```bash
+# 100 requests with valid auth token → 100 successful responses
+# Quota consumed: 100 requests
+```
+
+**Scenario 2: Invalid Authentication**
+```bash
+# 50 requests with invalid auth token → 50 unauthorized responses (401)
+# Quota consumed: 0 requests
+```
+
+**Scenario 3: Rate Limit Hit**
+```bash
+# 150 requests in one minute
+# - First 100 requests: successful (200)
+# - Next 50 requests: rate limited (429)
+# Quota consumed: 100 requests
+```
+
+**Scenario 4: Mixed Results**
+```bash
+# 1000 total requests:
+# - 900 successful (200)
+# - 50 unauthorized (401)
+# - 50 rate limited (429)
+# Quota consumed: 900 requests
+```
+
+## Fair Use Policy
+
+MocklyAPI is provided free of charge during early access. We ask that users:
+
+- Use the service for legitimate development and testing purposes
+- Avoid automated abuse or excessive traffic generation
+- Report bugs and provide feedback to help improve the platform
+
+Violating the fair use policy may result in account suspension.
+
+---
+
+## Questions?
+
+<CardGroup cols={2}>
+  <Card title="Support" icon="life-ring" href="mailto:support@mocklyapi.com">
+    Contact our support team
+  </Card>
+  <Card title="Feedback & Feature Requests" icon="lightbulb" href="https://airtable.com/appRaYAb2eblyothM/pagqoJ3kIQg3XhCSx/form">
+   Provide your valuable thoughts and suggest new features
+  </Card>
+</CardGroup>

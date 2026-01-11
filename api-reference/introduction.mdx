@@ -1,12 +1,204 @@
 ---
-title: 'Mock API Endpoints'
-description: 'Guidelines for using mock API endpoints'
+title: 'API Endpoint Structure'
+description: 'Understanding MocklyAPI endpoint URL structure and components'
+icon: 'link'
 ---
 
-## Utilizing Mock API Endpoints
+## Endpoint URL Anatomy
 
-Mock APIs adhere to the following pattern.
+MocklyAPI endpoints follow a structured URL format that combines the base API host, mock path, your unique mock API ID, and optional query parameters for filtering, ordering, and authentication.
 
-<Frame>
-  <img src="/images/mock-api-spec.png" alt="Mock API endpoint pattern." style={{ borderRadius: '0.5rem' }} />
-</Frame>
+### URL Structure Breakdown
+```
+https://api.mocklyapi.com/mock/{mockApiId}?{queryParameters}
+```
+
+---
+
+## Complete Example
+
+Here's a fully constructed MocklyAPI endpoint with all available parameters:
+```
+https://api.mocklyapi.com/mock/1f794d0d-8214-4e54-bd89-44d58a3be402?filters=size%3DS&order_by=price&order_direction=desc&limit=2&auth_token=m_bFfgx5z-JigqgvtD-P5aHLg0XgOwlMu-JauO14JGSCw
+```
+
+### Visual Breakdown
+```
+┌─────────────────────────┐
+│   API Host (Base URL)   │
+└─────────────────────────┘
+          │
+https://api.mocklyapi.com
+                          │
+                ┌─────────┴──────────┐
+                │   Static Path      │
+                └────────────────────┘
+                          │
+                       /mock/
+                             │
+                  ┌──────────┴─────────────────────────────────────┐
+                  │              Mock API ID (UUID)                │
+                  └────────────────────────────────────────────────┘
+                             │
+                        1f794d0d-8214-4e54-bd89-44d58a3be402
+                                                  │
+                      ┌───────────────────────────┴──────────────────────────────────────────────┐
+                      │                    Query Parameters                                      │
+                      └──────────────────────────────────────────────────────────────────────────┘
+                                                  │
+    ┌─────────────────────┬────────────────────┬────────────────────────┬───────────────────────┐
+    │                     │                    │                        │                       │                                
+filters=status%3Dactive order_by=createdAt    order_direction=desc    limit=2         auth_token=m_bFfgx5z-JigqgvtD...
+    │                     │                    │                        │                       │
+ (status=active)        (sort field)        (desc order)             (2 results)            (authentication)
+```
+
+---
+
+## URL Components Explained
+
+### 1. API Host
+```
+https://api.mocklyapi.com
+```
+
+**Description:** The base domain for all MocklyAPI endpoints.
+
+- **Protocol:** Always `https://` 
+- **Domain:** `api.mocklyapi.com` - MocklyAPI's server
+- **Fixed:** This part is same for all mock APIs
+
+---
+
+### 2. Static Path
+```
+/mock/
+```
+
+**Description:** The fixed path segment that identifies mock API endpoints.
+
+- All mock APIs are accessed through the `/mock/` path
+- **Fixed:** This part is same for all mock APIs
+
+---
+
+### 3. Mock API ID
+```
+1f794d0d-8214-4e54-bd89-44d58a3be402
+```
+
+**Description:** Your unique mock API identifier (UUID v4 format).
+
+- **Format:** UUID 
+- **Generated:** Automatically created when you create a new mock API
+
+<Note>
+  You can find your mock API ID in the MocklyAPI dashboard under your project's mock API list.
+</Note>
+
+---
+
+### 4. Query Parameters
+
+Query parameters are optional and control filtering, sorting, pagination, and authentication.
+```
+?filters=size%3DS&order_by=price&order_direction=desc&limit=2&auth_token=m_bFfgx5z...
+```
+
+#### 4.1 Filters Parameter
+```
+filters=size%3DS
+```
+
+**Decoded:** `filters=size=S`
+
+**Description:** URL-encoded filter conditions to narrow down results.
+
+- **Purpose:** Filter data based on field values
+- **Encoding:** Must be URL-encoded (special characters like `=` become `%3D`, `&` becomes `%26`)
+- **Operators:** Supports `$eq`, `$eqi`, `$ne`, `$nei`
+- **Multiple:** Combine with `&` (encoded as `%26`)
+- **Example:** `filters=status%3Dactive%26role%3Duser` → `status=active&role=user`
+
+**Common Examples:**
+```
+filters=status%3Dactive              → status equals "active"
+filters=age%5B%24ne%5D%3D30          → age not equals 30
+filters=email%5B%24eqi%5D%3Dtest     → email equals "test" (case-insensitive)
+```
+
+---
+
+#### 4.2 Order By Parameter
+```
+order_by=price
+```
+
+**Description:** The field name to sort results by.
+
+- **Purpose:** Specify which field to use for sorting
+- **Format:** Field name (supports nested paths with dot notation)
+- **Examples:**
+  - `order_by=createdAt` - Sort by creation date
+  - `order_by=age` - Sort by age
+  - `order_by=profile.firstName` - Sort by nested field
+
+---
+
+#### 4.3 Order Direction Parameter
+```
+order_direction=desc
+```
+
+**Description:** The sort direction for ordering results.
+
+- **Values:** 
+  - `asc` - Ascending order (A to Z, 0 to 9, oldest to newest)
+  - `desc` - Descending order (Z to A, 9 to 0, newest to oldest)
+- **Default:** `asc` if not specified
+- **Requires:** Must be used with `order_by` parameter
+
+---
+
+#### 4.4 Limit Parameter
+```
+limit=2
+```
+
+**Description:** Maximum number of results to return.
+
+- **Purpose:** Pagination and performance optimization
+- **Format:** Positive integer (0 or greater)
+- **Minimum:** `0` (returns empty array)
+- **Example:** `limit=10` returns first 10 results
+- **Applied:** After filtering and ordering
+
+---
+
+#### 4.5 Authentication Token
+```
+auth_token=m_bFfgx5z-JigqgvtD-P5aHLg0XgOwlMu-JauO14JGSCw
+```
+
+**Description:** Authentication token for private mock APIs.
+
+- **Purpose:** Secure access to private endpoints
+- **Required:** Only for private mock APIs
+- **Optional:** For public mock APIs
+- **Alternative:** Can be sent via header `mocklyapiauthtoken` also
+- **Format:** String token generated in your dashboard
+- **Security:** Keep your tokens secure and never commit them to public repositories
+
+<Warning>
+  Never share your authentication tokens publicly or commit them to version control. Treat them like passwords.
+</Warning>
+
+
+## Need Help?
+
+If you're having trouble constructing your API URLs, check out:
+
+- [Data Filtering, Ordering and Limiting](/features/data-filtering-ordering-limiting) - Detailed guide on query parameters
+- [Private endpoints](/features/private-endpoints) - How to use auth tokens
+
+Or contact our support team at support@mocklyapi.com

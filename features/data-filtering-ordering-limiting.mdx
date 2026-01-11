@@ -28,7 +28,39 @@ MocklyAPI provides powerful query capabilities for JSON array responses. You can
 | `order_direction` | string | Sort direction: `asc` or `desc` (default: `asc`) |
 | `limit` | number | Maximum number of results to return (minimum: 0) |
 
----
+## URL Encoding
+
+<Warning>
+  **The `filters` parameter must be URL-encoded** when it contains special characters like `=`, `&`, `[`, `]`.
+</Warning>
+
+### Why URL Encoding is Required
+
+When you include multiple filter conditions, the `&` character needs to be encoded as `%26` to prevent it from being interpreted as a query parameter separator.
+
+### Encoding Examples
+
+**❌ Incorrect (will only apply first filter):**
+```bash
+GET /api/{mockApiId}?filters=status=active&role=user
+# Server will interpret as : filters="status=active" and role="user" (separate parameters)
+```
+
+**✅ Correct (URL-encoded):**
+```bash
+GET /api/{mockApiId}?filters=status%3Dactive%26role%3Duser
+# Server will interpret as : filters="status=active&role=user" (single parameter)
+```
+
+### Common Character Encodings
+
+| Character | URL Encoded | Usage |
+|-----------|-------------|-------|
+| `=` | `%3D` | Equality operator |
+| `&` | `%26` | Filter condition separator |
+| `[` | `%5B` | Operator start bracket |
+| `]` | `%5D` | Operator end bracket |
+| `:` | `%3A` | Used in nested paths |
 
 ## Filtering
 
@@ -56,27 +88,47 @@ Filters use query string format and support:
 
 **Simple equality:**
 ```bash
-GET /api/{mockApiId}?filters=status=active
+# Raw filter string
+filters=status=active
+
+# URL-encoded request
+GET /api/{mockApiId}?filters=status%3Dactive
 ```
 
 **Case-insensitive matching:**
 ```bash
-GET /api/{mockApiId}?filters=email[$eqi]=JOHN@EXAMPLE.COM
+# Raw filter string
+filters=email[$eqi]=JOHN@EXAMPLE.COM
+
+# URL-encoded request
+GET /api/{mockApiId}?filters=email%5B%24eqi%5D%3DJOHN%40EXAMPLE.COM
 ```
 
 **Multiple conditions (AND):**
 ```bash
-GET /api/{mockApiId}?filters=status=active&role=admin
+# Raw filter string
+filters=status=active&role=admin
+
+# URL-encoded request
+GET /api/{mockApiId}?filters=status%3Dactive%26role%3Dadmin
 ```
 
 **Not equals:**
 ```bash
-GET /api/{mockApiId}?filters=status[$ne]=archived
+# Raw filter string
+filters=status[$ne]=archived
+
+# URL-encoded request
+GET /api/{mockApiId}?filters=status%5B%24ne%5D%3Darchived
 ```
 
 **Nested field filtering:**
 ```bash
-GET /api/{mockApiId}?filters=profile.country=USA
+# Raw filter string
+filters=profile.address.country=USA
+
+# URL-encoded request
+GET /api/{mockApiId}?filters=profile.address.country%3DUSA
 ```
 
 ---
@@ -104,7 +156,7 @@ GET /api/{mockApiId}?order_by=age&order_direction=desc
 
 **Sort nested fields:**
 ```bash
-GET /api/{mockApiId}?order_by=user.firstName&order_direction=asc
+GET /api/{mockApiId}?order_by=profile.firstName&order_direction=asc
 ```
 
 ---
@@ -142,7 +194,11 @@ You can combine filtering, ordering, and limiting in a single request.
 
 ### Example Request
 ```bash
-GET /api/{mockApiId}?filters=status=active&role=user&order_by=createdAt&order_direction=desc&limit=3
+# Raw filter string
+filters=status=active&role=user&order_by=createdAt&order_direction=desc&limit=3
+
+# Complete URL-encoded request
+GET /api/{mockApiId}?filters=status%3Dactive%26role%3Duser&order_by=createdAt&order_direction=desc&limit=3
 ```
 
 This will:
@@ -256,7 +312,11 @@ This dataset demonstrates both simple fields and nested object structures:
 
 **Example 1: Filter active users**
 ```bash
-GET /api/{mockApiId}?filters=status=active&role=user
+# Raw filter string
+filters=status=active&role=user
+
+# URL-encoded request
+GET /api/{mockApiId}?filters=status%3Dactive%26role%3Duser
 ```
 
 **Result:**
@@ -408,7 +468,11 @@ GET /api/{mockApiId}?order_by=age&order_direction=desc
 
 **Example 3: Active users, newest first, limit 2**
 ```bash
-GET /api/{mockApiId}?filters=status=active&order_by=createdAt&order_direction=desc&limit=2
+# Raw filter string
+filters=status=active
+
+# URL-encoded request
+GET /api/{mockApiId}?filters=status%3Dactive
 ```
 
 **Result:**
@@ -457,7 +521,11 @@ GET /api/{mockApiId}?filters=status=active&order_by=createdAt&order_direction=de
 
 **Example 4: Case-insensitive email search**
 ```bash
-GET /api/{mockApiId}?filters=email[$eqi]=charlie@example.com
+# Raw filter string
+filters=email[$eqi]=charlie@example.com
+
+# URL-encoded request
+GET /api/{mockApiId}?filters=email%5B%24eqi%5D%3Dcharlie%40example.com
 ```
 
 **Result:**
@@ -488,7 +556,11 @@ GET /api/{mockApiId}?filters=email[$eqi]=charlie@example.com
 
 **Example 5: Exclude admins, youngest first**
 ```bash
-GET /api/{mockApiId}?filters=role[$ne]=admin&order_by=age&order_direction=asc
+# Raw filter string
+filters=role[$ne]=admin
+
+# URL-encoded request
+GET /api/{mockApiId}?filters=role%5B%24ne%5D%3Dadmin
 ```
 
 **Result:**
@@ -553,9 +625,13 @@ GET /api/{mockApiId}?filters=role[$ne]=admin&order_by=age&order_direction=asc
 
 ---
 
-**Example 6: Filter by country USA (Nested path)**
+**Example 6: Filter by nested country (USA)**
 ```bash
-GET /api/{mockApiId}?filters=profile.address.country=USA
+# Raw filter string
+filters=profile.address.country=USA
+
+# URL-encoded request
+GET /api/{mockApiId}?filters=profile.address.country%3DUSA
 ```
 
 **Result:**
@@ -685,6 +761,7 @@ GET /api/{mockApiId}?order_by=profile.firstName&order_direction=asc&limit=3
 - **AND Logic**: Multiple filter conditions use AND logic (all must match). OR logic is not supported.
 - **Supported Operators**: Only `$eq`, `$eqi`, `$ne`, `$nei` are supported. Other operators will result an error.
 - **Nested Path Support**: Use dot notation for nested fields (e.g., `user.profile.age`)
+- **URL Encoding Required**: Always URL-encode the `filters` parameter to avoid parsing errors
 
 ---
 
@@ -702,12 +779,18 @@ GET /api/{mockApiId}?limit=-5
 # Error: limit must be >= 0
 ```
 
+**Missing URL encoding (common mistake):**
+```bash
+GET /api/{mockApiId}?filters=status=active&role=user
+# Data didn't filtered accurately : Only first filter applied (status=active), role treated as separate parameter
+```
+
 ---
 
 ## Tips & Best Practices
 
 <Tip>
-  - **URL Encode**: Always URL-encode your filter strings when making requests from code
+  - **Always URL Encode**: Use your programming language's URL encoding function to encode the `filters` parameter
   - **Test Incrementally**: Test filters, ordering, and limits separately before combining
   - **Nested Fields**: Take advantage of dot notation for complex data structures
   - **Performance**: Limiting results can improve response times for large datasets

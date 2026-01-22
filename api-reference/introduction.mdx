@@ -10,7 +10,7 @@ MocklyAPI endpoints follow a structured URL format that combines the base API ho
 
 ### URL Structure Breakdown
 ```
-https://api.mocklyapi.com/mock/{mockApiId}?{queryParameters}
+https://mock.mocklyapi.com/mock/{mockApiId}?{queryParameters}
 ```
 
 ---
@@ -19,7 +19,7 @@ https://api.mocklyapi.com/mock/{mockApiId}?{queryParameters}
 
 Here's a fully constructed MocklyAPI endpoint with all available parameters:
 ```
-https://api.mocklyapi.com/mock/1f794d0d-8214-4e54-bd89-44d58a3be402?filters=size%3DS&order_by=price&order_direction=desc&limit=2&auth_token=m_bFfgx5z-JigqgvtD-P5aHLg0XgOwlMu-JauO14JGSCw
+https://mock.mocklyapi.com/mock/1f794d0d-8214-4e54-bd89-44d58a3be402?filters=size%3DS&order_by=price&order_direction=desc&limit=2&auth_token=m_bFfgx5z-JigqgvtD-P5aHLg0XgOwlMu-JauO14JGSCw
 ```
 
 ### Visual Breakdown
@@ -28,7 +28,7 @@ https://api.mocklyapi.com/mock/1f794d0d-8214-4e54-bd89-44d58a3be402?filters=size
 │   API Host (Base URL)   │
 └─────────────────────────┘
           │
-https://api.mocklyapi.com
+https://mock.mocklyapi.com
                           │
                 ┌─────────┴──────────┐
                 │   Static Path      │
@@ -59,13 +59,13 @@ filters=status%3Dactive order_by=createdAt    order_direction=desc    limit=2   
 
 ### 1. API Host
 ```
-https://api.mocklyapi.com
+https://mock.mocklyapi.com
 ```
 
 **Description:** The base domain for all MocklyAPI endpoints.
 
 - **Protocol:** Always `https://` 
-- **Domain:** `api.mocklyapi.com` - MocklyAPI's server
+- **Domain:** `mock.mocklyapi.com` - MocklyAPI's server
 - **Fixed:** This part is same for all mock APIs
 
 ---

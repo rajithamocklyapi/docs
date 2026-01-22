@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://api.mocklyapi.com",
+      "url": "https://mock.mocklyapi.com",
       "description": "Production server"
     }
   ],

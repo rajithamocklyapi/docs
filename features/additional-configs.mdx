@@ -44,11 +44,13 @@ MocklyAPI provides multiple configuration options to customize your mock endpoin
 - Different response on every call
 - Useful for testing dynamic UI updates
 
+<Info>
+  Enabling this feature may increase API call latency, as new data is generated for each request.
+</Info>
+
 <Warning>
   This feature is only available for supported datasets that can be randomly generated. BYOD and some static datasets cannot be randomized.
 </Warning>
-
-
 
 <Warning>
  Configuration changes only take effect after you click the Save button. Unsaved changes will be lost if you navigate away.
